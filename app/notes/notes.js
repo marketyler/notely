@@ -24,13 +24,25 @@ angular.module('myApp.notes', ['ngRoute'])
     return $scope.notes().length > 0;
   };
 
-  $scope.commit = function() {
-    NotesBackend.postNote($scope.note);
+  $scope.saveNote = function() {
+    var note = $scope.note;
+    if (note.id){
+      NotesBackend.updateNote(note);
+    }
+    else {
+      NotesBackend.postNote(note);
+      $scope.note = {};
+    }
   };
 
   $scope.loadNote = function(note) {
     $scope.note = JSON.parse(JSON.stringify(note));
-  }
+  };
+
+  $scope.clearNote = function() {
+
+$scope.note = {};
+  };
 
   $scope.findNoteById = function(noteId) {
     var notes = $scope.notes();
@@ -41,11 +53,15 @@ angular.module('myApp.notes', ['ngRoute'])
     }
   };
 
+  $scope.buttonText = function(note) {
+      return (note && note.id) ? 'Update Note' : 'Create Note';
+  };
+
 }])
 
 .service('NotesBackend', ['$http', function($http){
-
   var notes = [];
+  var self = this;
 
   this.getNotes = function() {
     return notes;
@@ -65,6 +81,15 @@ angular.module('myApp.notes', ['ngRoute'])
     }).success(function(newNoteData) {
       notes.push(newNoteData);
     });
-  }
+  };
+
+  this.updateNote = function(note) {
+    $http.put(notelyBasePath +  'notes/' + note.id, {
+      api_key: apiKey,
+      note: note
+    }).success(function(response) {
+      self.fetchNotes();
+    })
+  };
 
 }]);
