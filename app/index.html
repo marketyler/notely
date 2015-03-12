@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
-<body>
+<body ng-controller="NotesController">
   <div class="container wrap">
     <div class="row">
       <div class="col-xs-12">
@@ -30,6 +30,10 @@
           <nav id="sidebar">
             <div class="well">
               SIDEBAR
+              <ul>
+                <li ng-repeat="note in notes"> {{  note.title }} </li>
+              </ul>
+
             </div>
           </nav>
         </div>
