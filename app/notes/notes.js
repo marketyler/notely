@@ -13,20 +13,38 @@ angular.module('myApp.notes', ['ngRoute'])
 }])
 
 .controller('NotesController', ['$scope', 'NotesBackend', function($scope, NotesBackend) {
+
   NotesBackend.fetchNotes();
+
   $scope.notes = function() {
     return NotesBackend.getNotes();
   };
 
-  $scope.commit = function() {
-    NotesBackend.postNote({
-      title: $scope.note.title,
-      body_html: $scope.note.body
-    });
+  $scope.hasNotes = function() {
+    return $scope.notes().length > 0;
   };
+
+  $scope.commit = function() {
+    NotesBackend.postNote($scope.note);
+  };
+
+  $scope.loadNote = function(note) {
+    $scope.note = note;
+  }
+
+  $scope.findNoteById = function(noteId) {
+    var notes = $scope.notes();
+    for (var i=0; i < notes.length; i++) {
+      if (notes[i].id === noteId) {
+        return notes[i];
+      }
+    }
+  };
+
 }])
 
 .service('NotesBackend', ['$http', function($http){
+
   var notes = [];
 
   this.getNotes = function() {
