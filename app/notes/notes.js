@@ -42,6 +42,8 @@ angular.module('myApp.notes', ['ngRoute'])
 
   $scope.clearNote = function() {
     $scope.note = {};
+
+    // Custom directive
     $scope.$broadcast('noteCleared');
   };
 
