@@ -30,8 +30,9 @@ angular.module('myApp.notes', ['ngRoute'])
       NotesBackend.updateNote(note);
     }
     else {
-      NotesBackend.postNote(note);
-      $scope.note = {};
+        NotesBackend.postNote($scope.note, function(newNote) {
+          $scope.note = JSON.parse(JSON.stringfy(newNote));
+      });
     }
   };
 
@@ -40,8 +41,8 @@ angular.module('myApp.notes', ['ngRoute'])
   };
 
   $scope.clearNote = function() {
-
-$scope.note = {};
+    $scope.note = {};
+    $scope.$broadcast('noteCleared');
   };
 
   $scope.findNoteById = function(noteId) {
@@ -74,12 +75,13 @@ $scope.note = {};
     });
   };
 
-  this.postNote = function(noteData) {
+  this.postNote = function(noteData, callback) {
     $http.post(notelyBasePath + 'notes', {
       api_key: apiKey,
       note: noteData
     }).success(function(newNoteData) {
       notes.push(newNoteData);
+      callback(newNoteData);
     });
   };
 
