@@ -3,7 +3,7 @@
 var notelyBasePath = 'https://elevennote-nov-2014.herokuapp.com/api/v1/';
 var apiKey = '$2a$10$0nJlKJMRwXhYvftMeVbPu.lTUUJ6qd8xhbT2s4AhGThPLde01xcnK';
 
-angular.module('myApp.notes', ['ngRoute'])
+angular.module('myApp.notes', ['ngRoute', 'textAngular'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/notes', {
