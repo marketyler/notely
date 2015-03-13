@@ -56,6 +56,11 @@ angular.module('myApp.notes', ['ngRoute'])
     }
   };
 
+  $scope.deleteNote = function(note) {
+    NotesBackend.deleteNote(note, function() {
+      $scope.clearNote();
+    });
+  };
   $scope.buttonText = function(note) {
       return (note && note.id) ? 'Update Note' : 'Create Note';
   };
@@ -94,6 +99,14 @@ angular.module('myApp.notes', ['ngRoute'])
     }).success(function(response) {
       self.fetchNotes();
     })
+  };
+
+  this.deleteNote = function(note, callback) {
+    console.log('delete');
+    $http.delete(notelyBasePath + 'notes/' + note.id + '?api_key=' + apiKey).success(function(response){
+      self.fetchNotes();
+      callback();
+    });
   };
 
 }]);
